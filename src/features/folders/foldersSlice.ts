@@ -15,9 +15,6 @@ const foldersSlice = createSlice({
       state.folders = [...payload];
     },
     removeFolder(state, { payload }) {
-    //   state.folders.filter(
-    //     (_item: TFolder) => _item.id !== payload,
-    //   );
       state.folders = [...payload];
     },
   },

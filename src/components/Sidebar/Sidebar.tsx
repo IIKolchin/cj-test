@@ -3,12 +3,13 @@ import styled from 'styled-components';
 import folders from '../../constants/constants';
 import { setFolders } from '../../features/folders/foldersSlice';
 import { useAppDispatch, useSelector } from '../../store/store';
+import Folders from '../Folder/Folders';
 // import FolderIcon from '@mui/icons-material/Folder';
 // import ExpandMoreOutlinedIcon from '@mui/icons-material/ExpandMoreOutlined';
 // import NavigateNextOutlinedIcon from '@mui/icons-material/NavigateNextOutlined';
 // import MovieIcon from '@mui/icons-material/Movie';
 // import Folder from '../Folder/Folder';
-import RecursiveComponent from '../Folder/recursiv';
+// import RecursiveComponent from '../Folder/recursiv';
 
 const Section = styled.ul`
   padding: 0;
@@ -44,24 +45,9 @@ function Sidebar() {
 
   return (
     <Section>
-      {/* {folders.map((folder) => (
-        <Folder
-          title={folder.title}
-          key={folder.id}
-          onClickHandler={() => onClick(folder.id)}
-          active={active}
-          id={folder.id}
-          addHandler={addHandler}
-        />
-      ))} */}
       {foldersArray.map((item, index) => (
-        <RecursiveComponent key={index} {...item} />
+        <Folders key={index} {...item} />
       ))}
-
-      {/* <ExpandMoreOutlinedIcon
-        sx={{ color: '#B7B7B7', width: '14px', height: '16px' }}
-      /> */}
-      {/* <MovieIcon /> */}
     </Section>
   );
 }

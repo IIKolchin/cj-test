@@ -25,6 +25,7 @@ function Folder(props: IFolderProps) {
   const Container = styled.li`
     display: flex;
     position: relative;
+    height: 26px;
     background-color: ${active.includes(id) ? '#2E2E2E' : '#252525'};
     border-right: ${active.includes(id) ? '1px solid #FFB800' : '#252525'};
   `;
