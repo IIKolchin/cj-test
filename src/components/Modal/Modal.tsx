@@ -1,16 +1,10 @@
-import { useEffect, ReactNode } from 'react';
+import { useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import styled from 'styled-components';
 import CloseIcon from '@mui/icons-material/Close';
+import { TmodalProps } from '../../services/types';
 
 const modalRoot = document.getElementById('modals') as HTMLDivElement;
-
-type TmodalProps = {
-  heading?: string;
-  handleHide: () => void;
-  children: ReactNode;
-  img: ReactNode;
-};
 
 const Section = styled.div`
   position: relative;

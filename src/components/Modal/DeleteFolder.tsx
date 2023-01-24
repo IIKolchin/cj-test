@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { TDeleteProps } from '../../services/types';
 
 const Text = styled.p`
   font-family: 'Roboto';
@@ -44,12 +45,6 @@ const ButtonDel = styled(ButtonEsc)`
 const Bold = styled.span`
 font-weight: 700;
 `;
-
-type TDeleteProps = {
-  onClickCancel: () => void;
-  onClickDelete: () => void;
-  folderName: string;
-};
 
 function DeleteFolder(props: TDeleteProps) {
   const { onClickCancel, onClickDelete, folderName } = props;
