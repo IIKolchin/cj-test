@@ -1,6 +1,14 @@
 import styled from 'styled-components';
 import AddBoxIcon from '@mui/icons-material/AddBox';
-import { TAddProps } from '../../services/types';
+import { FormEvent } from 'react';
+
+type TAddProps = {
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onSubmit: (e: FormEvent) => void;
+  value: string;
+  placeholder?: string;
+  name?: string;
+};
 
 const Form = styled.form`
   background-color: #252525;
@@ -53,7 +61,7 @@ const ButtonText = styled.span`
   color: #353535;
 `;
 
-function AddFolder(props: TAddProps) {
+function AddModal(props: TAddProps) {
   const {
     value, onChange, onSubmit, placeholder, name,
   } = props;
@@ -86,4 +94,4 @@ function AddFolder(props: TAddProps) {
   );
 }
 
-export default AddFolder;
+export default AddModal;

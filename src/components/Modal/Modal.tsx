@@ -1,8 +1,14 @@
-import { useEffect } from 'react';
+import { ReactNode, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import styled from 'styled-components';
 import CloseIcon from '@mui/icons-material/Close';
-import { TmodalProps } from '../../services/types';
+
+type TmodalProps = {
+  heading?: string;
+  handleHide: () => void;
+  children: ReactNode;
+  img: ReactNode;
+};
 
 const modalRoot = document.getElementById('modals') as HTMLDivElement;
 
@@ -13,7 +19,7 @@ const Section = styled.div`
   z-index: 12;
   position: fixed;
   left: 50%;
-  top: 50%;
+  top: 245px;
   transform: translate(-50%, -50%);
 `;
 

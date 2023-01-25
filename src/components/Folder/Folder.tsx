@@ -1,5 +1,5 @@
 import {
-  createRef, FormEvent, useEffect, useState,
+  FormEvent, useMemo, useState,
 } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import styled from 'styled-components';
@@ -11,28 +11,40 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import cloneDeep from 'lodash/cloneDeep';
 import { useAppDispatch, useSelector } from '../../store/store';
 import { setFolders } from '../../features/folders/foldersSlice';
-import AddFolder from '../Modal/AddFolder';
-import Modal from '../Modal/Modal';
-import DeleteFolder from '../Modal/DeleteFolder';
+import AddModal from '../modal/add-modal';
+import DeleteModal from '../modal/delete-modal';
 import { findTitleById, findIndexById, findFirstIndex } from '../../utils';
-import { TChildProps, TFoldersProps, TItemProps } from '../../services/types';
+import { TFolder } from '../../services/types';
+import Modal from '../modal/modal';
 
-const Container = styled.ul`
+type TFoldersProps = {
+  children?: TFolder[];
+  title?: string;
+  id: string;
+  depth?: number;
+  currentFolderIndex: string;
+  setCurrentFolderIndex: (newValue: string) => void;
+};
+
+interface TItemProps {
+  active: boolean;
+}
+
+const List = styled.ul`
   position: relative;
   list-style: none;
   margin: 0;
   padding: 0;
 `;
 
-const Child = styled.ul<TChildProps>`
+const Child = styled.ul<TItemProps>`
   padding: 0 0 0 14px;
   margin: 0;
-  display: ${({ depth, active }) => (depth && active ? 'block' : 'none')};
+  display: ${({ active }) => (active ? 'block' : 'none')};
 `;
 
 const Item = styled.li<TItemProps>`
   position: relative;
-  z-index: 2;
   height: 26px;
   display: flex;
   align-items: center;
@@ -40,7 +52,7 @@ const Item = styled.li<TItemProps>`
   border-right: ${({ active }) => (active ? '1px solid #FFB800' : '#252525')};
 `;
 
-const List = styled.div<TItemProps>`
+const WrapperItem = styled.div<TItemProps>`
   position: absolute;
   top: 0;
   left: -40px;
@@ -83,11 +95,9 @@ const Wrapper = styled.div`
 `;
 
 function Folder({
-  children, depth = 1, title, id,
+  children, depth = 1, title, id, currentFolderIndex, setCurrentFolderIndex,
 }: TFoldersProps) {
   const [active, setActive] = useState(false);
-  // const [active1, setActive1] = useState();
-  const [activeFolder, setActiveFolder] = useState<any>();
   const [firstIndex, setFirstIndex] = useState<number>();
   const [secondIndex, setSecondIndex] = useState<number>();
   const [thirdIndex, setThirdIndex] = useState<number>();
@@ -96,28 +106,18 @@ function Folder({
   const [openModalDel, setOpenModalDel] = useState(false);
   const [value, setValue] = useState('');
 
-  const myRef = createRef<any>();
   const dispatch = useAppDispatch();
   const foldersArray = useSelector((state) => state.folders.folders);
+  const deepCopyArr = cloneDeep(foldersArray);
 
-  const deep = cloneDeep(foldersArray);
-  const iD: string | null | undefined = !active ? id : null;
-  const iDDel: string | null | undefined = active ? id : null;
+  const isSelected = useMemo(() => id === currentFolderIndex, [id, currentFolderIndex]);
 
-  useEffect(() => {
-  }, []);
-
-  console.log(activeFolder);
-  // React.MouseEvent<HTMLDivElement, MouseEvent>
-
-  const onClick = (e: any) => {
-    const copyActiveFolder = [e.currentTarget.getAttribute('id')];
-    setActiveFolder([...copyActiveFolder][0]);
+  const onClick = () => {
     setActive(!active);
     if (depth === 1) {
       localStorage.removeItem('firstIdx');
 
-      const idxFirst = findFirstIndex(deep, iD!);
+      const idxFirst = findFirstIndex(deepCopyArr, id!);
       setFirstIndex(idxFirst);
       localStorage.setItem('firstIdx', String(idxFirst));
     }
@@ -126,7 +126,7 @@ function Folder({
 
       const idxFirst = localStorage.getItem('firstIdx');
       setFirstIndex(+idxFirst!);
-      const idxSecond = +findIndexById(deep, iD!)!;
+      const idxSecond = +findIndexById(deepCopyArr, id!)!;
       setSecondIndex(idxSecond);
       localStorage.setItem('secondIdx', String(idxSecond));
     }
@@ -138,7 +138,7 @@ function Folder({
       const idxSecond = localStorage.getItem('secondIdx');
       setSecondIndex(+idxSecond!);
 
-      const idxThird = +findIndexById(deep, iD!)!;
+      const idxThird = +findIndexById(deepCopyArr, id!)!;
       setThirdIndex(idxThird);
       localStorage.setItem('thirdIdx', String(idxThird));
     }
@@ -152,7 +152,7 @@ function Folder({
       const idxThird = localStorage.getItem('thirdIdx');
       setThirdIndex(+idxThird!);
 
-      const idxFourth = +findIndexById(deep, iD!)!;
+      const idxFourth = +findIndexById(deepCopyArr, id!)!;
       setFourthIndex(idxFourth);
       localStorage.setItem('fourthIdx', String(idxFourth));
     }
@@ -163,50 +163,49 @@ function Folder({
     title: value,
     children: [],
   };
-  // console.log(value);
 
   const newArrAdd = () => {
     switch (depth) {
       case 1:
-        deep[firstIndex!].children!.push(newObj);
+        deepCopyArr[firstIndex!].children!.push(newObj);
         break;
       case 2:
-        deep[firstIndex!].children![secondIndex!].children!.push(newObj);
+        deepCopyArr[firstIndex!].children![secondIndex!].children!.push(newObj);
         break;
       case 3:
-        deep[firstIndex!].children![secondIndex!].children![
+        deepCopyArr[firstIndex!].children![secondIndex!].children![
           thirdIndex!
         ].children!.push(newObj);
         break;
       default:
         break;
     }
-    return deep;
+    return deepCopyArr;
   };
 
   const newArrDel = () => {
     switch (depth) {
       case 1:
-        deep.splice(firstIndex!, 1);
+        deepCopyArr.splice(firstIndex!, 1);
         break;
       case 2:
-        deep[firstIndex!].children!.splice(secondIndex!, 1);
+        deepCopyArr[firstIndex!].children!.splice(secondIndex!, 1);
         break;
       case 3:
-        deep[firstIndex!].children![secondIndex!].children!.splice(
+        deepCopyArr[firstIndex!].children![secondIndex!].children!.splice(
           thirdIndex!,
           1,
         );
         break;
       case 4:
-        deep[firstIndex!].children![secondIndex!].children![
+        deepCopyArr[firstIndex!].children![secondIndex!].children![
           thirdIndex!
         ].children!.splice(fourthIndex!, 1);
         break;
       default:
         break;
     }
-    return deep;
+    return deepCopyArr;
   };
 
   const addFolderHandler = (e: FormEvent) => {
@@ -240,10 +239,10 @@ function Folder({
 
   return (
     <>
-      <Container>
-        <Item active={active} ref={myRef}>
-          <List active={active} />
-          <Buttons active={active}>
+      <List>
+        <Item active={isSelected} onClick={() => setCurrentFolderIndex(id!)}>
+          <WrapperItem active={active} />
+          <Buttons active={isSelected}>
             {depth < 4 && (
             <AddButton onClick={openModalAddFolder}>
               <AddBoxIcon
@@ -267,8 +266,7 @@ function Folder({
               />
             </DeleteButton>
           </Buttons>
-          {/* )} */}
-          <Wrapper onClick={onClick} id={id}>
+          <Wrapper onClick={onClick}>
             {active ? (
               <ExpandMoreOutlinedIcon
                 sx={{
@@ -294,14 +292,21 @@ function Folder({
             <Title>{title}</Title>
           </Wrapper>
         </Item>
+
         {Array.isArray(children) ? (
-          <Child depth={depth} active={active}>
-            {children.map((item, index) => (
-              <Folder key={index} depth={depth + 1} {...item} />
+          <Child active={active}>
+            {children.map((item) => (
+              <Folder
+                key={item.id}
+                depth={depth + 1}
+                {...item}
+                currentFolderIndex={currentFolderIndex!}
+                setCurrentFolderIndex={setCurrentFolderIndex}
+              />
             ))}
           </Child>
         ) : null}
-      </Container>
+      </List>
 
       {openModalAdd && (
         <Modal
@@ -317,7 +322,7 @@ function Folder({
           )}
           handleHide={handleHide}
         >
-          <AddFolder
+          <AddModal
             onChange={onChange}
             onSubmit={addFolderHandler}
             value={value}
@@ -338,10 +343,10 @@ function Folder({
           )}
           handleHide={handleHide}
         >
-          <DeleteFolder
+          <DeleteModal
             onClickCancel={handleHide}
             onClickDelete={deleteFolderHandler}
-            folderName={findTitleById(deep, iDDel!)!}
+            folderName={findTitleById(deepCopyArr, id!)!}
           />
         </Modal>
       )}

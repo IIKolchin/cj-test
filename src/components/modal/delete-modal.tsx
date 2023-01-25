@@ -1,6 +1,11 @@
 import styled from 'styled-components';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { TDeleteProps } from '../../services/types';
+
+type TDeleteProps = {
+  onClickCancel: () => void;
+  onClickDelete: () => void;
+  folderName: string;
+};
 
 const Text = styled.p`
   font-family: 'Roboto';
@@ -43,22 +48,20 @@ const ButtonDel = styled(ButtonEsc)`
 `;
 
 const Bold = styled.span`
-font-weight: 700;
+  font-weight: 700;
 `;
 
-function DeleteFolder(props: TDeleteProps) {
+function DeleteModal(props: TDeleteProps) {
   const { onClickCancel, onClickDelete, folderName } = props;
   return (
     <>
       <Text>
         `The sequence
         {' '}
-        <Bold>
-          {folderName}
-        </Bold>
+        <Bold>{folderName}</Bold>
         {' '}
-        and related objects will be permanently deleted and
-        cannot be restored.`
+        and related objects will be
+        permanently deleted and cannot be restored.`
       </Text>
       <Text>Are you sure you want to continue?</Text>
       <Group>
@@ -79,4 +82,4 @@ function DeleteFolder(props: TDeleteProps) {
   );
 }
 
-export default DeleteFolder;
+export default DeleteModal;

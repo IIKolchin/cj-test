@@ -18,15 +18,15 @@ function findTitleById(array: TFolder[], id: string): string | undefined {
   }
 }
 
-function findIndexById(array: TFolder[], idObj: string) {
+function findIndexById(array: TFolder[], id: string) {
   for (let index = 0; index < array.length; index++) {
     const element = array[index];
 
-    if (element.id === idObj) {
+    if (element.id === id) {
       return index || '0';
     }
     if (element.children) {
-      const found: any = findIndexById(element.children, idObj);
+      const found: any = findIndexById(element.children, id);
       if (found) {
         return found || '0';
       }
@@ -34,10 +34,10 @@ function findIndexById(array: TFolder[], idObj: string) {
   }
 }
 
-function findFirstIndex(array: TFolder[], idObj: string) {
+function findFirstIndex(array: TFolder[], id: string) {
   for (let index = 0; index < array.length; index++) {
     const element = array[index];
-    if (element.id === idObj) {
+    if (element.id === id) {
       return index;
     }
   }
