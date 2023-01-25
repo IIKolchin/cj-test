@@ -15,7 +15,7 @@ import AddFolder from '../Modal/AddFolder';
 import Modal from '../Modal/Modal';
 import DeleteFolder from '../Modal/DeleteFolder';
 import { findTitleById, findIndexById, findFirstIndex } from '../utils';
-import { TFoldersProps } from '../../services/types';
+import { TChildProps, TFoldersProps, TItemProps } from '../../services/types';
 
 const Container = styled.ul`
   position: relative;
@@ -24,17 +24,20 @@ const Container = styled.ul`
   padding: 0;
 `;
 
-const Child = styled.ul`
+const Child = styled.ul<TChildProps>`
   padding: 0 0 0 14px;
   margin: 0;
+  display: ${({ depth, active }) => (depth && active ? 'block' : 'none')};
 `;
 
-const Item = styled.li`
+const Item = styled.li<TItemProps>`
   position: relative;
   z-index: 2;
   height: 26px;
   display: flex;
   align-items: center;
+  background-color: ${({ active }) => (active ? '#2E2E2E' : '#252525')};
+  border-right: ${({ active }) => (active ? '1px solid #FFB800' : '#252525')};
 `;
 
 const List = styled.div`
@@ -81,9 +84,8 @@ function Folders({
   children, depth = 1, title, id,
 }: TFoldersProps) {
   const [active, setActive] = useState(false);
-  // const [activeFolder, setActiveFolder] = useState(false);
-  // const [onFocusFolder, setOnFocusFolder] = useState(null);
-  // const [onBlureFolder, setOnBlureFolder] = useState();
+  // const [active1, setActive1] = useState(false);
+  // const [activeFolder, setActiveFolder] = useState<string>();
   const [firstIndex, setFirstIndex] = useState<number>();
   const [secondIndex, setSecondIndex] = useState<number>();
   const [thirdIndex, setThirdIndex] = useState<number>();
@@ -93,12 +95,6 @@ function Folders({
   const [value, setValue] = useState('');
 
   const myRef = createRef<any>();
-
-  const styleActive = {
-    backgroundColor: active ? '#2E2E2E' : '#252525',
-    borderRight: active ? '1px solid #FFB800' : '#252525',
-  };
-  const childStyle = { display: depth && active ? 'block' : 'none' };
   const dispatch = useAppDispatch();
   const foldersArray = useSelector((state) => state.folders.folders);
 
@@ -106,10 +102,13 @@ function Folders({
   const iD: string | null | undefined = !active ? id : null;
   const iDDel: string | null | undefined = active ? id : null;
 
-  useEffect(() => {});
-  console.log(myRef);
+  useEffect(() => {
+  }, []);
+
+  console.log(active);
 
   const onClick = () => {
+    // setActive(e.currentTarget.getAttribute('id'));
     setActive(!active);
     if (depth === 1) {
       localStorage.removeItem('firstIdx');
@@ -160,11 +159,6 @@ function Folders({
     title: value,
     children: [],
   };
-
-  // console.log(firstIndex);
-  // console.log(secondIndex);
-  // console.log(thirdIndex);
-  // console.log(fourthIndex);
   // console.log(value);
 
   const newArrAdd = () => {
@@ -215,6 +209,7 @@ function Folders({
     e.preventDefault();
     dispatch(setFolders(newArrAdd()));
     setOpenModalAdd(false);
+    setValue('');
   };
 
   const deleteFolderHandler = () => {
@@ -242,33 +237,33 @@ function Folders({
   return (
     <>
       <Container>
-        <Item style={styleActive} ref={myRef}>
+        <Item active={active} ref={myRef}>
           {active && <List />}
           {active && (
-            <Buttons>
-              {depth < 4 && (
-                <AddButton onClick={openModalAddFolder}>
-                  <AddBoxIcon
-                    sx={{
-                      color: '#B7B7B7',
-                      width: '16px',
-                      height: '16px',
-                      mr: 1,
-                    }}
-                  />
-                </AddButton>
-              )}
-              <DeleteButton onClick={openModalDelete}>
-                <DeleteIcon
-                  sx={{
-                    color: '#B7B7B7;',
-                    width: '16px',
-                    height: '16px',
-                    mr: 2,
-                  }}
-                />
-              </DeleteButton>
-            </Buttons>
+          <Buttons>
+            {depth < 4 && (
+            <AddButton onClick={openModalAddFolder}>
+              <AddBoxIcon
+                sx={{
+                  color: '#B7B7B7',
+                  width: '16px',
+                  height: '16px',
+                  mr: 1,
+                }}
+              />
+            </AddButton>
+            )}
+            <DeleteButton onClick={openModalDelete}>
+              <DeleteIcon
+                sx={{
+                  color: '#B7B7B7;',
+                  width: '16px',
+                  height: '16px',
+                  mr: 2,
+                }}
+              />
+            </DeleteButton>
+          </Buttons>
           )}
           <Wrapper onClick={onClick}>
             {active ? (
@@ -297,7 +292,7 @@ function Folders({
           </Wrapper>
         </Item>
         {Array.isArray(children) ? (
-          <Child style={childStyle}>
+          <Child depth={depth} active={active}>
             {children.map((item, index) => (
               <Folders key={index} depth={depth + 1} {...item} />
             ))}

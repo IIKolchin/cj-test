@@ -33,3 +33,12 @@ export type TDeleteProps = {
   onClickDelete: () => void;
   folderName: string;
 };
+
+export interface TItemProps {
+  active: boolean;
+}
+
+export interface TChildProps {
+  active: boolean;
+  depth: number;
+}
