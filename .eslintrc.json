@@ -21,6 +21,7 @@
   "plugins": ["react", "@typescript-eslint"],
   "rules": {
     "react/jsx-props-no-spreading": "off",
+    "object-curly-newline": "off",
     "jsx-a11y/label-has-associated-control": ["error", { "assert": "either" }],
     "default-param-last": "off",
     "@typescript-eslint/default-param-last": "off",

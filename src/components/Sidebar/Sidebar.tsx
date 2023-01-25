@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import folders from '../../constants/constants';
 import { setFolders } from '../../features/folders/foldersSlice';
 import { useAppDispatch, useSelector } from '../../store/store';
-import Folders from '../Folder/Folders';
+import Folder from '../Folder/Folder';
 
 const Section = styled.div`
   padding: 22px 0 0 0;
@@ -23,7 +23,7 @@ function Sidebar() {
   return (
     <Section>
       {foldersArray.map((item, index) => (
-        <Folders key={index} {...item} />
+        <Folder key={index} {...item} />
       ))}
     </Section>
   );

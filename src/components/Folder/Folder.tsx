@@ -14,7 +14,7 @@ import { setFolders } from '../../features/folders/foldersSlice';
 import AddFolder from '../Modal/AddFolder';
 import Modal from '../Modal/Modal';
 import DeleteFolder from '../Modal/DeleteFolder';
-import { findTitleById, findIndexById, findFirstIndex } from '../utils';
+import { findTitleById, findIndexById, findFirstIndex } from '../../utils';
 import { TChildProps, TFoldersProps, TItemProps } from '../../services/types';
 
 const Container = styled.ul`
@@ -40,7 +40,7 @@ const Item = styled.li<TItemProps>`
   border-right: ${({ active }) => (active ? '1px solid #FFB800' : '#252525')};
 `;
 
-const List = styled.div`
+const List = styled.div<TItemProps>`
   position: absolute;
   top: 0;
   left: -40px;
@@ -49,6 +49,7 @@ const List = styled.div`
   height: 26px;
   z-index: -1;
   overflow: hidden;
+  display: ${({ active }) => (active ? 'block' : 'none')};
 `;
 
 const AddButton = styled.button`
@@ -69,10 +70,11 @@ const Title = styled.h3`
   color: #cecece;
 `;
 
-const Buttons = styled.div`
+const Buttons = styled.div<TItemProps>`
   position: absolute;
   right: 0;
   z-index: 2;
+  display: ${({ active }) => (active ? 'block' : 'none')};
 `;
 
 const Wrapper = styled.div`
@@ -80,12 +82,12 @@ const Wrapper = styled.div`
   width: 100%;
 `;
 
-function Folders({
+function Folder({
   children, depth = 1, title, id,
 }: TFoldersProps) {
   const [active, setActive] = useState(false);
-  // const [active1, setActive1] = useState(false);
-  // const [activeFolder, setActiveFolder] = useState<string>();
+  // const [active1, setActive1] = useState();
+  const [activeFolder, setActiveFolder] = useState<any>();
   const [firstIndex, setFirstIndex] = useState<number>();
   const [secondIndex, setSecondIndex] = useState<number>();
   const [thirdIndex, setThirdIndex] = useState<number>();
@@ -105,10 +107,12 @@ function Folders({
   useEffect(() => {
   }, []);
 
-  console.log(active);
+  console.log(activeFolder);
+  // React.MouseEvent<HTMLDivElement, MouseEvent>
 
-  const onClick = () => {
-    // setActive(e.currentTarget.getAttribute('id'));
+  const onClick = (e: any) => {
+    const copyActiveFolder = [e.currentTarget.getAttribute('id')];
+    setActiveFolder([...copyActiveFolder][0]);
     setActive(!active);
     if (depth === 1) {
       localStorage.removeItem('firstIdx');
@@ -238,16 +242,15 @@ function Folders({
     <>
       <Container>
         <Item active={active} ref={myRef}>
-          {active && <List />}
-          {active && (
-          <Buttons>
+          <List active={active} />
+          <Buttons active={active}>
             {depth < 4 && (
             <AddButton onClick={openModalAddFolder}>
               <AddBoxIcon
                 sx={{
                   color: '#B7B7B7',
-                  width: '16px',
-                  height: '16px',
+                  width: '12px',
+                  height: '12px',
                   mr: 1,
                 }}
               />
@@ -257,15 +260,15 @@ function Folders({
               <DeleteIcon
                 sx={{
                   color: '#B7B7B7;',
-                  width: '16px',
-                  height: '16px',
+                  width: '12px',
+                  height: '12px',
                   mr: 2,
                 }}
               />
             </DeleteButton>
           </Buttons>
-          )}
-          <Wrapper onClick={onClick}>
+          {/* )} */}
+          <Wrapper onClick={onClick} id={id}>
             {active ? (
               <ExpandMoreOutlinedIcon
                 sx={{
@@ -294,7 +297,7 @@ function Folders({
         {Array.isArray(children) ? (
           <Child depth={depth} active={active}>
             {children.map((item, index) => (
-              <Folders key={index} depth={depth + 1} {...item} />
+              <Folder key={index} depth={depth + 1} {...item} />
             ))}
           </Child>
         ) : null}
@@ -307,8 +310,8 @@ function Folders({
             <AddBoxIcon
               sx={{
                 color: '#B7B7B7;',
-                width: '13px',
-                height: '13px',
+                width: '12px',
+                height: '12px',
               }}
             />
           )}
@@ -346,4 +349,4 @@ function Folders({
   );
 }
 
-export default Folders;
+export default Folder;
