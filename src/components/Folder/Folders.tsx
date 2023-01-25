@@ -45,7 +45,7 @@ const List = styled.div`
   top: 0;
   left: -40px;
   background-color: #2e2e2e;
-  width: 250px;
+  width: 230px;
   height: 26px;
   z-index: -1;
   overflow: hidden;
