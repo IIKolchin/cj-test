@@ -9,13 +9,13 @@ import NavigateNextOutlinedIcon from '@mui/icons-material/NavigateNextOutlined';
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import DeleteIcon from '@mui/icons-material/Delete';
 import cloneDeep from 'lodash/cloneDeep';
-import { useAppDispatch, useSelector } from '../../store/store';
-import { setFolders } from '../../store/foldersSlice';
-import AddModal from '../modal/add-modal';
-import DeleteModal from '../modal/delete-modal';
-import { findTitleById, findIndexById, findFirstIndex } from '../../utils';
-import { TFolder } from '../../types';
-import Modal from '../modal/modal';
+import { useAppDispatch, useSelector } from '../store/store';
+import { setFolders } from '../store/foldersSlice';
+import AddModal from './modal/add-modal';
+import DeleteModal from './modal/delete-modal';
+import { findTitleById, findIndexById, findFirstIndex } from '../utils';
+import { TFolder } from '../types';
+import Modal from './modal/modal';
 
 type TFoldersProps = {
   children?: TFolder[];

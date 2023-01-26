@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import Sidebar from '../sidebar/sidebar';
+import Sidebar from './sidebar';
 
 const Body = styled.section`
   background-color: #202020;

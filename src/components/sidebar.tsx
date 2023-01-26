@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import folders from '../../constants/constants';
-import { setFolders } from '../../store/foldersSlice';
-import { useAppDispatch, useSelector } from '../../store/store';
-import Folder from '../folder/folder';
+import folders from '../constants/constants';
+import { setFolders } from '../store/foldersSlice';
+import { useAppDispatch, useSelector } from '../store/store';
+import Folder from './folder';
 
 const Section = styled.div`
   padding: 22px 0 0 0;
