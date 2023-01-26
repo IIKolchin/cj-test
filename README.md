@@ -1,6 +1,14 @@
 # CJ-Test
 
+## Функционал
+* создание и удаление папок
 
+## Используемые технологии
+* TypeScript
+* React
+* Redux
+* Styled Components
+* MUI
 
 ## Запуск проекта
 
