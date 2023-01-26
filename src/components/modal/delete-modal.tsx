@@ -9,17 +9,22 @@ type TDeleteProps = {
 
 const Text = styled.p`
   font-family: 'Roboto';
+  margin: 20px 0 18px;
   font-style: normal;
   font-weight: 300;
   font-size: 14px;
   line-height: 16px;
   text-align: center;
   color: #cecece;
+
+  &:nth-of-type(2) {
+    margin-top: 18px;
+  }
 `;
 
 const Group = styled.div`
   display: flex;
-  margin: 18px 0 14px 18px;
+  margin: 26px 0 14px 18px;
 `;
 
 const ButtonEsc = styled.button`

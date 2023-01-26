@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import folders from '../../constants/constants';
-import { setFolders } from '../../features/folders/foldersSlice';
+import { setFolders } from '../../store/foldersSlice';
 import { useAppDispatch, useSelector } from '../../store/store';
 import Folder from '../folder/folder';
 

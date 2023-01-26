@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 import { createSlice } from '@reduxjs/toolkit';
-import { TFolder } from '../../services/types';
+import { TFolder } from '../types';
 
 const foldersSlice = createSlice({
   name: 'folders',

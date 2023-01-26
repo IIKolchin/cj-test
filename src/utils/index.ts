@@ -1,6 +1,6 @@
 /* eslint-disable consistent-return */
 /* eslint-disable no-plusplus */
-import { TFolder } from '../services/types';
+import { TFolder } from '../types';
 
 function findTitleById(array: TFolder[], id: string): string | undefined {
   for (let index = 0; index < array.length; index++) {

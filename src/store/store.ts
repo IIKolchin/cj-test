@@ -4,7 +4,7 @@ import {
   TypedUseSelectorHook,
   useSelector as selectorHook,
 } from 'react-redux';
-import foldersSlice from '../features/folders/foldersSlice';
+import foldersSlice from './foldersSlice';
 
 const store = configureStore({
   reducer: {
